@@ -1,0 +1,49 @@
+
+REPORT  z_alv.
+
+* Cargar la tabla SFLIGHT de la base de datos
+TABLES: sflight.
+
+* Cargamos los datos tipo slis
+TYPES: slis.
+
+* Definición de variables
+DATA: g_it_sflight TYPE TABLE OF sflight,
+      g_st_sflight TYPE sflight.
+
+DATA: g_it_fieldcat TYPE slis_t_fieldcat_alv,
+      g_st_fieldcat TYPE slis_fieldcat_alv.
+
+* SQL para copiar la tabla sflight a la tabla interna
+SELECT * FROM sflight INTO TABLE g_it_sflight.
+
+* Datos del fieldcat para el ALV
+g_st_fieldcat-fieldname = 'CARRID'. "Nombre del campo de la tabla
+g_st_fieldcat-seltext_m = 'Compañía'. "Descripción media
+g_st_fieldcat-seltext_s = 'Comp.'. "Descripción corta
+APPEND g_st_fieldcat TO g_it_fieldcat.
+
+g_st_fieldcat-fieldname = 'CONNID'.
+g_st_fieldcat-seltext_m = 'Nº vuelo'.
+g_st_fieldcat-seltext_s = 'Vuelo'.
+APPEND g_st_fieldcat TO g_it_fieldcat.
+
+g_st_fieldcat-fieldname = 'FLDATE'.
+g_st_fieldcat-seltext_m = 'Fecha de vuelo'.
+g_st_fieldcat-seltext_s = 'Fecha'.
+APPEND g_st_fieldcat TO g_it_fieldcat.
+
+g_st_fieldcat-fieldname = 'PRICE'.
+g_st_fieldcat-seltext_m = 'Tarifa de vuelo'.
+g_st_fieldcat-seltext_s = 'Tarifa'.
+APPEND g_st_fieldcat TO g_it_fieldcat.
+
+* Función ALV
+CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+  EXPORTING
+    it_fieldcat   = g_it_fieldcat[]
+  TABLES
+    t_outtab      = g_it_sflight[]
+  EXCEPTIONS
+    program_error = 1
+    OTHERS        = 2.

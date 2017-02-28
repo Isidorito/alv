@@ -1,44 +1,57 @@
 
 REPORT  z_alv.
 
-* Cargar la tabla SFLIGHT de la base de datos
+* Table declaration, using SFLIGHT as example
 TABLES: sflight.
 
-* Cargamos los datos tipo slis
+* We charge the spool type SLIS (if errors appears, try the second option)
+*
+
 TYPES: slis.
 
-* Definición de variables
+***
+*If you get errors on types, use the following statement instead of the previous one
+*TYPE-POOLS: slis.
+***
+
+* Variable definition
+
 DATA: g_it_sflight TYPE TABLE OF sflight,
       g_st_sflight TYPE sflight.
 
 DATA: g_it_fieldcat TYPE slis_t_fieldcat_alv,
       g_st_fieldcat TYPE slis_fieldcat_alv.
 
-* SQL para copiar la tabla sflight a la tabla interna
+**********************************************************************************************************
+* Retrieve data from DB
+
 SELECT * FROM sflight INTO TABLE g_it_sflight.
 
-* Datos del fieldcat para el ALV
-g_st_fieldcat-fieldname = 'CARRID'. "Nombre del campo de la tabla
-g_st_fieldcat-seltext_m = 'Compañía'. "Descripción media
-g_st_fieldcat-seltext_s = 'Comp.'. "Descripción corta
+**********************************************************************************************************
+
+* Charging the ALV catalog
+
+g_st_fieldcat-fieldname = 'CARRID'. "Name of the table field
+g_st_fieldcat-seltext_m = 'Company'. "Mid desc.
+g_st_fieldcat-seltext_s = 'Comp.'. "Short desc.
 APPEND g_st_fieldcat TO g_it_fieldcat.
 
 g_st_fieldcat-fieldname = 'CONNID'.
-g_st_fieldcat-seltext_m = 'Nº vuelo'.
-g_st_fieldcat-seltext_s = 'Vuelo'.
+g_st_fieldcat-seltext_m = 'Flight Num.'.
+g_st_fieldcat-seltext_s = 'Flight'.
 APPEND g_st_fieldcat TO g_it_fieldcat.
 
 g_st_fieldcat-fieldname = 'FLDATE'.
-g_st_fieldcat-seltext_m = 'Fecha de vuelo'.
-g_st_fieldcat-seltext_s = 'Fecha'.
+g_st_fieldcat-seltext_m = 'Flight Date'.
+g_st_fieldcat-seltext_s = 'Date'.
 APPEND g_st_fieldcat TO g_it_fieldcat.
 
 g_st_fieldcat-fieldname = 'PRICE'.
-g_st_fieldcat-seltext_m = 'Tarifa de vuelo'.
-g_st_fieldcat-seltext_s = 'Tarifa'.
+g_st_fieldcat-seltext_m = 'Flight Price'.
+g_st_fieldcat-seltext_s = 'Price'.
 APPEND g_st_fieldcat TO g_it_fieldcat.
 
-* Función ALV
+* Call ALV Function
 CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
   EXPORTING
     it_fieldcat   = g_it_fieldcat[]

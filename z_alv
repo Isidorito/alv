@@ -7,11 +7,11 @@ TABLES: sflight.
 * We charge the spool type SLIS (if errors appears, try the second option)
 *
 
-TYPES: slis.
+TYPE-POOLS: slis.
 
 ***
 *If you get errors on types, use the following statement instead of the previous one
-*TYPE-POOLS: slis.
+*TYPES: slis.
 ***
 
 * Variable definition

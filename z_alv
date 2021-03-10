@@ -7,7 +7,7 @@ TABLES: sflight.
 * We charge the spool type SLIS (if errors appears, try the second option)
 *
 
-TYPE-POOLS: slis.
+TYPE-POOLS: slis.   "<---- Use this one
 
 ***
 *If you get errors on types, use the following statement instead of the previous one
